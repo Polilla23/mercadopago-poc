@@ -15,23 +15,35 @@ export class PaymentController {
                 transaction_amount: 1000,
                 currency_id: "ARS", 
             },
-            back_url: "http://localhost:3000/success",
+            back_url: "https://www.google.com",
             payer_email: "test_user_388089664@testuser.com",
             // notification_url: 'https://www.google.com' // a donde quieras recibir la notificación con método POST
         }
 
         try {
-            const response = await axios.post(
-                url,
-                subscriptionData,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${process.env.ACCESS_TOKEN}`
-                    }
-                }
-            )
-            reply.send(response.data)
+            // const response = await axios.post(
+            //     url,
+            //     subscriptionData,
+            //     {
+            //         headers: {
+            //             'Content-Type': 'application/json',
+            //             'Authorization': `Bearer ${process.env.ACCESS_TOKEN}`
+            //         }
+            //     }
+            // )
+            // reply.send(response.data)
+
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${process.env.ACCESS_TOKEN}`
+                },
+                body: JSON.stringify(subscriptionData)
+            });
+
+            const data = await response.json()
+            reply.send(data)
         } catch (e) {
             console.error('Error creating subscription: ', e)
             reply.status(500).send({ error: 'Failed to create subscription'})
